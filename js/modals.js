@@ -329,7 +329,7 @@
           <p>Kami sangat terbuka untuk mendengar saran dari guru, siswa, maupun pengembang pendidikan lainnya.</p>
           <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 inline-block mx-auto">
             <p class="font-bold text-slate-900 mb-1">Email Resmi</p>
-            <a href="mailto:halo@labkimia.io" class="text-lab-600 hover:underline text-lg">halo@labkimia.io</a>
+            <a href="mailto:hi.kangjessy@gmail.com" class="text-lab-600 hover:underline text-lg">hi.kangjessy@gmail.com</a>
           </div>
           <p class="text-xs text-slate-400 mt-4">Atau hubungi pengembang langsung melalui portofolio: <br/> <a href="https://kangjessy.vercel.app" class="underline">kangjessy.vercel.app</a></p>
         </div>
