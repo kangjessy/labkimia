@@ -7,6 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              lab: {
+                50: "#edfaf4", 100: "#d3f4e3", 200: "#aae8cb",
+                300: "#72d5ad", 400: "#3aba8a", 500: "#1a9e70",
+                600: "#107f5a", 700: "#0d664a", 800: "#0d513c",
+                900: "#0b4332", 950: "#052519",
+              },
+            },
+          },
+        },
+      };
+    </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
