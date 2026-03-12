@@ -37,6 +37,26 @@
     if (e.key === 'Enter') checkPin();
   });
 
+  // ── CONFIG TEMPLATE EMAIL ─────────────────
+  const EMAIL_SUBJECT = 'Selamat! Kamu masuk dalam daftar Beta LabKimia.io';
+  const EMAIL_BODY    = 'Halo,\n\nTerima kasih sudah mendaftar di LabKimia.io. Kami sangat senang memberitahumu bahwa email kamu sudah terdaftar sebagai penguji awal.\n\nKami akan segera mengirimkan link akses khusus saat platform siap.\n\nSalam,\nKang Jessy';
+
+  async function deleteEmail(id) {
+    if (!confirm('Yakin ingin menghapus email ini dari daftar?')) return;
+
+    try {
+        const { error } = await supabase
+            .from('subscribers')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+        fetchEmails(); // Refresh list
+    } catch (err) {
+        alert('Gagal menghapus: ' + err.message);
+    }
+  }
+
   // ── INIT & FETCH ───────────────────────────
   function initSupabase() {
     try {
@@ -78,18 +98,33 @@
         if (count === 0) {
             tableBody.innerHTML = `<tr><td colspan="3" class="px-8 py-12 text-center text-slate-400 italic">Belum ada pendaftar masuk. Ayo semangat promo!</td></tr>`;
         } else {
-            tableBody.innerHTML = data.map((item, idx) => `
-                <tr class="hover:bg-slate-50 transition-colors">
+            tableBody.innerHTML = data.map((item, idx) => {
+                const mailtoLink = `mailto:${item.email}?subject=${encodeURIComponent(EMAIL_SUBJECT)}&body=${encodeURIComponent(EMAIL_BODY)}`;
+                return `
+                <tr class="hover:bg-slate-50 transition-colors group">
                     <td class="px-8 py-5">
                         <div class="px-3 py-1 bg-lab-50 text-lab-600 text-[10px] font-bold rounded-full inline-block">BETA TESTER #${count - idx}</div>
                     </td>
-                    <td class="px-8 py-5 font-bold text-slate-800">${item.email}</td>
-                    <td class="px-8 py-5 text-slate-400 text-sm">${new Date(item.created_at).toLocaleString('id-ID')}</td>
+                    <td class="px-8 py-5">
+                        <div class="font-bold text-slate-800">${item.email}</div>
+                        <div class="text-[10px] text-slate-400">${new Date(item.created_at).toLocaleString('id-ID')}</div>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <a href="${mailtoLink}" class="p-2 bg-sky-50 text-sky-600 rounded-lg hover:bg-sky-600 hover:text-white transition-all shadow-sm" title="Balas via Gmail">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 00-2 2z"/></svg>
+                            </a>
+                            <button onclick="deleteEmail('${item.id}')" class="p-2 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-600 hover:text-white transition-all shadow-sm" title="Hapus pendaftar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        lastTime.textContent = 'Update: ' + new Date().toLocaleTimeString();
+        lastTime.textContent = 'Last sync: ' + new Date().toLocaleTimeString();
 
     } catch (err) {
         console.error('Fetch error:', err);
@@ -97,6 +132,7 @@
     }
   }
 
+  window.deleteEmail = deleteEmail;
   window.copyAllEmails = function () {
     if (allEmails.length === 0) return alert('Tidak ada email untuk disalin.');
     
