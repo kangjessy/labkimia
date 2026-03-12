@@ -50,8 +50,13 @@
             .delete()
             .eq('id', id);
 
-        if (error) throw error;
-        fetchEmails(); // Refresh list
+        if (error) {
+            console.error('Delete Error:', error);
+            throw new Error(error.message || 'Izin database ditolak (Cek RLS/Policy)');
+        }
+        
+        // Kasih feedback visual sebentar sebelum refresh
+        fetchEmails(); 
     } catch (err) {
         alert('Gagal menghapus: ' + err.message);
     }
